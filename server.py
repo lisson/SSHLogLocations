@@ -1,23 +1,25 @@
 import re
 import sys
 import io
-from flask import Flask
-from collections import deque
 import os
 import time
 import json
 import threading
+from collections import deque
 
 import SSHLogParser
+from flask import Flask
+from flask import render_template
 
 app = Flask(__name__)
+app.config['DEBUG'] = True
 LastEntries = deque([], maxlen=15)
 logParser = SSHLogParser.Parser("GeoLite2-City.mmdb")
 logFile = None
 
 @app.route("/")
-def hello():
-    return "Hello World!"
+def index():
+    return render_template('base.html')
 
 @app.route("/locations")
 def locations():

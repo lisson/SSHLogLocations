@@ -1,0 +1,28 @@
+<!doctype html>
+<title>Hello from Flask</title>
+<head>
+  <script type = "text/javascript" src = "static/map.js" ></script>
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+          height: 500px;
+          width: 500px;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+      </style>
+      <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=<keyhere>&callback=initMap">
+      </script>
+</head>
+<body>
+  <div id="map">
+    
+  </div>
+</body>
+</html>
