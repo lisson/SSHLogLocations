@@ -5,6 +5,7 @@ import os
 import time
 import json
 import threading
+import configparser
 from collections import deque
 
 import SSHLogParser
@@ -16,10 +17,11 @@ app.config['DEBUG'] = True
 LastEntries = deque([], maxlen=15)
 logParser = SSHLogParser.Parser("GeoLite2-City.mmdb")
 logFile = None
+MapsAPIKey = None
 
 @app.route("/")
 def index():
-    return render_template('base.html')
+    return render_template('base.html', apikey=MapsAPIKey)
 
 @app.route("/locations")
 def locations():
@@ -39,7 +41,7 @@ def UpdateLogQueue():
 
 def StartUpdateLogQueueThread():
     thread = threading.Thread(target=UpdateLogQueue, args=())
-    thread.daemon = True                            # Daemonize thread
+    thread.daemon = True
     thread.start()
 
 
@@ -48,6 +50,12 @@ if __name__ == '__main__':
         exit(1)
     if(os.path.isfile(sys.argv[1]) == False):
         print("{sys.argv[1]} not found")
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+    if(config['DEFAULT']['GMapAPIKey'] == None):
+        print("Google maps key not defined")
+        exit(1)
+    MapsAPIKey = config['DEFAULT']['GMapAPIKey']
     logFile = sys.argv[1]
     StartUpdateLogQueueThread()
     app.run()
